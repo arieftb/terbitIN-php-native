@@ -10,12 +10,15 @@
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/me.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
+
 </head>
 <body class="grey lighten-5">
   <div class="navbar-fixed">
     <nav class="pink lighten-1" role="navigation">
       <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">terbitIN</a>
-        <ul iid="nav-mobile" class="right hide-on-med-and-down">
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
               <div class="input-field">
                 <input id="search" type="search" required>
@@ -23,6 +26,15 @@
                 <i class="material-icons">close</i>
               </div>
           </li>
+
+          <li>
+            <a class='dropdown-button' data-beloworigin="true" href='#' data-activates='dropdown1'><i class="material-icons">settings</i></a>
+          </li>
+
+          <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="login" class="pink-text lighten-1">LOGIN</a></li>
+            <li><a href="register" class="pink-text lighten-1">REGISTER</a></li>
+          </ul>
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
@@ -40,7 +52,7 @@
         <h5 class="header col s12 light"> <span class=" bg-text-head  white-text"> Publish Your Own Book Here </span></h5>
       </div>
       <div class="row center">
-        <a href="register.php" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
+        <a href="register" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
       </div>
       <br><br>
 

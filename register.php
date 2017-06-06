@@ -10,11 +10,17 @@
   <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="css/me.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
 </head>
 <body class="grey lighten-5">
   <div class="navbar-fixed">
     <nav class="pink lighten-1" role="navigation">
-      <div class="nav-wrapper container"><a id="logo-container" href="index.php" class="brand-logo">terbitIN</a>
+      <div class="nav-wrapper container"><a id="logo-container" href="home" class="brand-logo">terbitIN</a>
+
+        <ul class="left back">
+          <i class="fa fa-arrow-left small" onclick="history.go(-1);" aria-hidden="true"></i>
+        </ul>
         <ul iid="nav-mobile" class="right hide-on-med-and-down">
           <li>
               <div class="input-field">
@@ -23,6 +29,16 @@
                 <i class="material-icons">close</i>
               </div>
           </li>
+
+          <li>
+            <a class='dropdown-button' data-beloworigin="true" href='#' data-activates='dropdown1'><i class="material-icons">settings</i></a>
+          </li>
+
+          <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="login" class="pink-text lighten-1">LOGIN</a></li>
+            <li><a href="register" class="pink-text lighten-1">REGISTER</a></li>
+          </ul>
+
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
