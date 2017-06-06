@@ -14,7 +14,7 @@
 <body class="grey lighten-5">
   <div class="navbar-fixed">
     <nav class="pink lighten-1" role="navigation">
-      <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">terbitIN</a>
+      <div class="nav-wrapper container"><a id="logo-container" href="index.php" class="brand-logo">terbitIN</a>
         <ul iid="nav-mobile" class="right hide-on-med-and-down">
           <li>
               <div class="input-field">
@@ -37,59 +37,74 @@
   <br><br>
 
   <div class="container">
+
     <div class="section white">
       <!--   Icon Section   -->
       <div class="row">
+
         <div class="col s12 m12">
-          <div class="icon-block">
-            <h5 class="center">Register</h5>
-            <div class="divider"></div>
+
+          <h5 class="center">Register</h5>
+          <div class="divider"></div>
+          <form action="" method="POST">
+
             <div class="col s12 m12">
-              <div class="input-field col s6">
-                <input placeholder="First Name" name="fname" id="first_name" type="text" class="validate">
-                <label for="first_name"></label>
+
+              <div class="input-field col s12 m12">
+                <input placeholder="Name" name="name" id="name" type="text" class="validate">
+                <label for="name"></label>
               </div>
-              <div class="input-field col s6">
-                <input placeholder="Last Name" name="lname" id="last_name" type="text" class="validate">
-                <label for="last_name"></label>
-              </div>
+
             </div>
 
             <div class="col s12 m12">
+
               <div class="input-field col s12">
                 <input placeholder="Phone Number" name="pnumber" id="pnumber" type="number" class="validate" value="62">
                 <label for="pnumber"></label>
               </div>
+
             </div>
 
             <div class="col s12 m12">
+
               <div class="input-field col s12">
                 <input placeholder="Address" name="address" id="address" type="text" class="validate">
                 <label for="address"></label>
               </div>
+
             </div>
 
             <div class="col s12 m12">
+
               <div class="file-field input-field">
                 <div class="btn pink lighten-1">
-                  <span>File</span>
-                  <input type="file">
+                  <span>Photo</span>
+                  <input type="file" name="photo">
                 </div>
                 <div class="file-path-wrapper">
                   <input class="file-path validate" type="text">
                 </div>
               </div>
+
             </div>
 
             <div class="col s12 m3">
-              <button class="btn waves-effect waves-light orange" type="submit" name="action">Submit
+
+              <button class="btn waves-effect waves-light orange" type="submit" name="submit">Submit
                 <i class="material-icons right">send</i>
               </button>
+
             </div>
-          </div>
+
+          </form>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
 
   <br><br>
@@ -129,6 +144,35 @@
       </div>
     </div>
   </footer>
+
+  <!-- Insert PHP -->
+
+  <?php
+    if (isset($_POST['submit'])) {
+      include "config/connection.php";
+
+      $name = $_POST['name'];
+      $pnumber = $_POST['pnumber'];
+      $address = $_POST['address'];
+      $photo = $_POST['photo'];
+
+      if ($photo == '') {
+        $photo = '/default/no-ava.png';
+      }
+
+      $sql = "INSERT INTO pengarang (id_pengarang, nama, no_hp, alamat, foto_pengarang)
+              VALUES ('', '$name', '$pnumber', '$address', '$photo')";
+
+      $query = mysqli_query($connect, $sql);
+
+      if ($query) {
+        echo "<script>alert('Registration Success')</script>";
+      }
+      else {
+        echo "Gagal";
+      }
+    }
+  ?>
 
 
   <!--  Scripts-->
