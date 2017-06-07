@@ -20,3 +20,12 @@
 	margin-right: 20px;
 	cursor: pointer;
 }
+
+img.img-respon {
+	width: 30px;
+	height: 30px;
+}
+
+button.btn-submit {
+	width: 100%;
+}

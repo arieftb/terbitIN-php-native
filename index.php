@@ -1,3 +1,7 @@
+<?php
+include "config/obstart.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +24,15 @@
       <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">terbitIN</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
-              <div class="input-field">
-                <input id="search" type="search" required>
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
+            <div class="input-field">
+              <input id="search" type="search" required>
+              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+              <i class="material-icons">close</i>
+            </div>
           </li>
 
           <li>
-            <a class='dropdown-button' data-beloworigin="true" href='#' data-activates='dropdown1'><i class="material-icons">settings</i></a>
+            <a class='dropdown-button' data-beloworigin="true" href='#' data-activates='dropdown1'><i class="material-icons">more_vert</i></a>
           </li>
 
           <ul id='dropdown1' class='dropdown-content'>
@@ -98,13 +102,13 @@
     <br><br>
 
     <div class="section">
-    
+
       <div class="row">
         <div class="col s12 m3">
           <div class="card">
             <div class="card-image">
               <div class="col m3">
-        
+
               </div>
 
               <img src="img/default/no-pic-book.png">
@@ -152,7 +156,7 @@
     </div>
     <div class="footer-copyright">
       <div class="container">
-      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+        Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
       </div>
     </div>
   </footer>
@@ -163,5 +167,5 @@
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
 
-  </body>
+</body>
 </html>

@@ -1,3 +1,7 @@
+<?php
+include "config/obstart.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,11 +27,11 @@
         </ul>
         <ul iid="nav-mobile" class="right hide-on-med-and-down">
           <li>
-              <div class="input-field">
-                <input id="search" type="search" required>
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
+            <div class="input-field">
+              <input id="search" type="search" required>
+              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+              <i class="material-icons">close</i>
+            </div>
           </li>
 
           <li>
@@ -54,7 +58,7 @@
 
   <div class="container">
 
-    <div class="section white">
+    <div class="section white z-depth-1">
       <!--   Icon Section   -->
       <div class="row">
 
@@ -105,11 +109,9 @@
 
             </div>
 
-            <div class="col s12 m3">
+            <div class="col s12 m2 offset-m5">
 
-              <button class="btn waves-effect waves-light orange" type="submit" name="submit">Submit
-                <i class="material-icons right">send</i>
-              </button>
+              <button class="btn waves-effect waves-light orange" type="submit" name="submit">Submit</button>
 
             </div>
 
@@ -156,7 +158,7 @@
     </div>
     <div class="footer-copyright">
       <div class="container">
-      Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+        Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
       </div>
     </div>
   </footer>
@@ -164,30 +166,31 @@
   <!-- Insert PHP -->
 
   <?php
-    if (isset($_POST['submit'])) {
-      include "config/connection.php";
+  if (isset($_POST['submit'])) {
+    include "config/connection.php";
 
-      $name = $_POST['name'];
-      $pnumber = $_POST['pnumber'];
-      $address = $_POST['address'];
-      $photo = $_POST['photo'];
+    $name = $_POST['name'];
+    $pnumber = $_POST['pnumber'];
+    $address = $_POST['address'];
+    $photo = $_POST['photo'];
 
-      if ($photo == '') {
-        $photo = '/default/no-ava.png';
-      }
-
-      $sql = "INSERT INTO pengarang (id_pengarang, nama, no_hp, alamat, foto_pengarang)
-              VALUES ('', '$name', '$pnumber', '$address', '$photo')";
-
-      $query = mysqli_query($connect, $sql);
-
-      if ($query) {
-        echo "<script>alert('Registration Success')</script>";
-      }
-      else {
-        echo "Gagal";
-      }
+    if ($photo == '') {
+      $photo = '/default/no-ava.png';
     }
+
+    $sql = "INSERT INTO pengarang (id_pengarang, nama, no_hp, alamat, foto_pengarang)
+    VALUES ('', '$name', '$pnumber', '$address', '$photo')";
+
+    $query = mysqli_query($connect, $sql);
+
+    if ($query) {
+      echo "<script>alert('Registration Success')</script>";
+      header('location:home');
+    }
+    else {
+      echo "Gagal";
+    }
+  }
   ?>
 
 
@@ -196,5 +199,5 @@
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
 
-  </body>
+</body>
 </html>
