@@ -1,6 +1,6 @@
 <?php
-include 'obstart.php';
-include 'connection.php';
+include '../config/obstart.php';
+include '../config/connection.php';
 
 session_start();
 if (empty($_SESSION['name']) || empty($_SESSION['pnumber'])) {

@@ -99,7 +99,7 @@ $pnumber = $_SESSION['pnumber'];
 
           <h5 class="center pink-text">Publish</h5>
           <div class="divider"></div>
-          <form action="" method="POST">
+          <form action="" method="POST" enctype="multipart/form-data">
 
             <div class="col s12 m12">
 
@@ -135,7 +135,7 @@ $pnumber = $_SESSION['pnumber'];
 
             <div class="col s12">
               <div class="input-field col s12">
-                <select>
+                <select name="category">
                   <option value="" disabled selected>Category</option>
 
                   <?php
@@ -205,13 +205,13 @@ $pnumber = $_SESSION['pnumber'];
                 while($row = mysqli_fetch_assoc($query)){
 
 
-                ?>
+                  ?>
                   <tr>
                     <td><?php echo $row['nama_kategori']; ?></td>
-                    <td><a href="../config/editcat.php?id=<?php echo $row['id_kategori']; ?>"><center><i class="material-icons orange-text">mode_edit</i></center></a></td>
-                    <td><a href="../config/delcat.php?id=<?php echo $row['id_kategori']; ?>"><center><i class="fa fa-times small pink-text lighten-1" aria-hidden="true"></i></center></a></td>
+                    <td><a href="editcat.php?id=<?php echo $row['id_kategori']; ?>"><center><i class="material-icons orange-text">mode_edit</i></center></a></td>
+                    <td><a href="delcat.php?id=<?php echo $row['id_kategori']; ?>"><center><i class="fa fa-times small pink-text lighten-1" aria-hidden="true"></i></center></a></td>
                   </tr>
-                <?php
+                  <?php
                 }
                 ?>
               </tbody>
@@ -247,22 +247,53 @@ $pnumber = $_SESSION['pnumber'];
 <?php
 if (isset($_POST['publish'])) {
 
-  $name = $_POST['name'];
-  $pnumber = $_POST['pnumber'];
-  $address = $_POST['address'];
-  $photo = $_POST['photo'];
+  $title = $_POST['title'];
+  $isbn = $_POST['isbn'];
+  $category = $_POST['category'];
+  $loct_pic = $_FILES['cover']['tmp_name'];
+  $name_pic = $_FILES['cover']['name'];
+  $file_ext = strtolower(end(explode('.', $name_pic)));
 
-  if ($photo == '') {
-    $photo = '/default/no-ava.png';
+
+
+  $folder = '../img/cover/'.$title.'.'.$file_ext;
+
+  $name_pic = $title.'.'.$file_ext;
+
+
+  if ($name_pic == '') {
+    $name_pic = '/default/no-pic-book.png';
   }
 
-  $sql = "INSERT INTO pengarang (id_pengarang, nama, no_hp, alamat, foto_pengarang)
-  VALUES ('', '$name', '$pnumber', '$address', '$photo')";
+  move_uploaded_file($loct_pic, "$folder");
 
-  $query = mysqli_query($connect, $sql);
 
-  if ($query) {
-    echo "<script>alert('Registration Success')</script>";
+
+  $inputBuku = "INSERT INTO buku (id_buku, judul_buku, isbn, image_cover, id_kategori)
+  VALUES ('', '$title', '$isbn', '/cover/$name_pic', '$category')";
+  $query1 = mysqli_query($connect, $inputBuku);
+
+  $readBuku = "SELECT * FROM buku WHERE isbn = '$isbn'";
+  $query2 = mysqli_query($connect, $readBuku);
+  $row = mysqli_fetch_array($query2);
+
+  $id_buku = $row['id_buku'];
+
+  $readPengarang = "SELECT * FROM pengarang WHERE nama = '$name' AND no_hp = '$pnumber'";
+  $query3 = mysqli_query($connect, $readPengarang);
+
+  $row2 = mysqli_fetch_array($query3);
+
+  $id_pengarang = $row2['id_pengarang'];
+
+  $inputBukuPengarang = "INSERT INTO buku_pengarang (id_buku, id_pengarang)
+  VALUES ('$id_buku', '$id_pengarang')";
+  $query4 = mysqli_query($connect, $inputBukuPengarang);
+
+
+
+  if ($query3 && $query4) {
+    echo "<script>alert('Success')</script>";
     header('location:home');
   }
   else {
