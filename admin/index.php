@@ -12,6 +12,12 @@ if (empty($_SESSION['name']) || empty($_SESSION['pnumber'])) {
 $name = $_SESSION['name'];
 $pnumber = $_SESSION['pnumber'];
 
+// $readPengarang = "SELECT * FROM pengarang WHERE nama = $name AND no_hp = $pnumber";
+// $queryPengarang = mysqli_query($connect, $readPengarang);
+// $rowPengarang = mysqli_fetch_array($queryPengarang);
+
+// $id_pengarang = $rowPengarang['id_pengarang'];
+
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +55,10 @@ $pnumber = $_SESSION['pnumber'];
 
         $row = mysqli_fetch_array($query);
 
+        $id_pengarang = $row['id_pengarang'];
+
+
+
         ?>
 
         <li>
@@ -63,7 +73,7 @@ $pnumber = $_SESSION['pnumber'];
 
         <ul id='dropdown1' class='dropdown-content'>
 
-          <li><a href="../config/logout.php" class="pink-text lighten-1">LOGOUT</a></li>
+          <li><a href="logout.php" class="pink-text lighten-1">LOGOUT</a></li>
           <li><a href="../register" class="pink-text lighten-1">REGISTER</a></li>
 
         </ul>
@@ -77,7 +87,7 @@ $pnumber = $_SESSION['pnumber'];
     <div class="nav-content container">
       <ul class="tabs tabs-transparent">
         <li class="tab"><a href="#publish">Publish</a></li>
-        <li class="tab"><a href="#test2">Your Book</a></li>
+        <li class="tab"><a href="#ownbooks">Your Book</a></li>
         <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
         <li class="tab"><a href="#test4">Test 4</a></li>
       </ul>
@@ -104,16 +114,35 @@ $pnumber = $_SESSION['pnumber'];
             <div class="col s12 m12">
 
               <div class="input-field col s12 m12">
-                <input placeholder="Judul" name="title" id="title" type="text" class="validate">
+                <input placeholder="Judul" name="title" id="title" type="text" class="validate" required>
                 <label for="title"></label>
               </div>
 
             </div>
 
+            <div class="input-field col s12">
+              <select multiple name="author[]" required>
+                <option value="" disabled selected>Author</option>
+
+                <?php
+
+                  $sql = "SElECT * FROM pengarang ORDER BY nama ASC";
+                  $query = mysqli_query($connect, $sql);
+
+                  while($row = mysqli_fetch_assoc($query)){
+
+                    ?>
+                <option value="<?php echo $row['id_pengarang']; ?>"><?php echo $row['nama']; ?></option>
+
+                <?php } ?>
+              </select>
+            </div>
+
+
             <div class="col s12 m12">
 
               <div class="input-field col s12 m12">
-                <input placeholder="ISBN" name="isbn" id="isbn" type="number" class="validate">
+                <input placeholder="ISBN" name="isbn" id="isbn" type="text" class="validate">
                 <label for="isbn"></label>
               </div>
 
@@ -135,7 +164,7 @@ $pnumber = $_SESSION['pnumber'];
 
             <div class="col s12">
               <div class="input-field col s12">
-                <select name="category">
+                <select name="category" required>
                   <option value="" disabled selected>Category</option>
 
                   <?php
@@ -152,7 +181,6 @@ $pnumber = $_SESSION['pnumber'];
                   }
                   ?>
                 </select>
-                <label>Category</label>
 
               </div>
             </div>
@@ -225,100 +253,142 @@ $pnumber = $_SESSION['pnumber'];
 
     </div>
 
+    <div class="section" id="ownbooks">
 
-  </div>
+      <div class="row">
 
-  <br></body>
+        <?php 
 
-
-  <!--  Scripts-->
-  <script src="../js/jquery-2.1.1.min.js"></script>
-  <script src="../js/materialize.js"></script>
-  <script src="../js/init.js"></script>
-
-  <script type="text/javascript">
-
-   $(document).ready(function() {
-    $('select').material_select();
-  });
-</script>
-
-
-<?php
-if (isset($_POST['publish'])) {
-
-  $title = $_POST['title'];
-  $isbn = $_POST['isbn'];
-  $category = $_POST['category'];
-  $loct_pic = $_FILES['cover']['tmp_name'];
-  $name_pic = $_FILES['cover']['name'];
-  $file_ext = strtolower(end(explode('.', $name_pic)));
+        $readBook = "SELECT * FROM buku_pengarang BP JOIN buku B ON B.id_buku = BP.id_buku JOIN kategori K ON K.id_kategori = B.id_kategori JOIN pengarang P ON P.id_pengarang = $id_pengarang WHERE BP.id_pengarang = $id_pengarang";
+        $queryBook = mysqli_query($connect, $readBook);
+        
+        while ($rowBook = mysqli_fetch_array($queryBook)) {
 
 
 
-  $folder = '../img/cover/'.$title.'.'.$file_ext;
 
-  $name_pic = $title.'.'.$file_ext;
+          ?>
+
+          <div class="col s12 m3">
+            <div class="card">
+              <div class="card-image">
+                <div class="col s12 m3">
+
+                </div>
+
+                <img src="../img<?php echo $rowBook['image_cover']; ?>">
+                <!-- <a class="btn-floating halfway-fab waves-effect waves-light pink lighten-1"><i class="material-icons">add</i></a> -->
+                <a href="editbook.php?id=<?php echo $rowBook['id_buku']; ?>" class="left btn-floating halfway-fab waves-effect waves-light yellow accent-4"><i class="material-icons">mode_edit</i></a>
+                <a href="delbook.php?id=<?php echo $rowBook['id_buku']; ?>" class="btn-floating halfway-fab waves-effect waves-light red accent-4"><i class="material-icons">close</i></a>
+              </div>
+              <div class="card-content">
+                <center><h6><a href="editbook.php?id=<?php echo $rowBook['id_buku']; ?>" class="orange-text"><b><?php echo $rowBook['judul_buku']; ?></b></a></h6></center>
+              </div>
+            </div>
+          </div>
+
+          <?php } ?>
+
+        </div>
+
+      </div>
 
 
-  if ($name_pic == '') {
-    $name_pic = '/default/no-pic-book.png';
+    </div>
+
+    <br></body>
+
+
+    <!--  Scripts-->
+    <script src="../js/jquery-2.1.1.min.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script src="../js/init.js"></script>
+
+    <script type="text/javascript">
+
+     $(document).ready(function() {
+      $('select').material_select();
+    });
+  </script>
+
+
+  <?php
+  if (isset($_POST['publish'])) {
+
+    $title = $_POST['title'];
+    $isbn = $_POST['isbn'];
+    $category = $_POST['category'];
+    $loct_pic = $_FILES['cover']['tmp_name'];
+    $name_pic = $_FILES['cover']['name'];
+    $file_ext = strtolower(end(explode('.', $name_pic)));
+    $author = $_POST['author'];
+
+
+    $folder = '../img/cover/'.$title.'.'.$file_ext;
+
+    $name_pic = $title.'.'.$file_ext;
+
+
+    if ($name_pic == '') {
+      $name_pic = '/default/no-pic-book.png';
+    }
+
+    move_uploaded_file($loct_pic, "$folder");
+
+
+
+    $inputBuku = "INSERT INTO buku (id_buku, judul_buku, isbn, image_cover, id_kategori)
+    VALUES ('', '$title', '$isbn', '/cover/$name_pic', '$category')";
+    $query1 = mysqli_query($connect, $inputBuku);
+
+    $readBuku = "SELECT * FROM buku WHERE isbn = '$isbn'";
+    $query2 = mysqli_query($connect, $readBuku);
+    $row = mysqli_fetch_array($query2);
+
+    $id_buku = $row['id_buku'];
+
+    // $readPengarang = "SELECT * FROM pengarang WHERE nama = '$name' AND no_hp = '$pnumber'";
+    // $query3 = mysqli_query($connect, $readPengarang);
+
+    // $row2 = mysqli_fetch_array($query3);
+
+    // $id_pengarang = $row2['id_pengarang'];
+
+    foreach ($author as $key => $v_author) {
+      $inputBukuPengarang = "INSERT INTO buku_pengarang (id_buku, id_pengarang)
+      VALUES ('$id_buku', '$v_author')";
+      $query4 = mysqli_query($connect, $inputBukuPengarang); 
+    }
+
+
+
+    if ($query1 && $query4) {
+      echo "<script>alert('Success')</script>";
+      header('location:home');
+    }
+    else {
+      echo "Gagal";
+    }
   }
 
-  move_uploaded_file($loct_pic, "$folder");
+  if (isset($_POST['add_cat'])) {
+
+    $cat = $_POST['cat'];
+
+    $sql = "INSERT INTO kategori (id_kategori, nama_kategori) VALUES ('', '$cat')";
+
+    $query = mysqli_query($connect, $sql);
 
 
+    if ($query) {
+      header('location:home');
+    }
+    else {
+      echo "<script>alert('Add Failed')</script>";
+    }
 
-  $inputBuku = "INSERT INTO buku (id_buku, judul_buku, isbn, image_cover, id_kategori)
-  VALUES ('', '$title', '$isbn', '/cover/$name_pic', '$category')";
-  $query1 = mysqli_query($connect, $inputBuku);
-
-  $readBuku = "SELECT * FROM buku WHERE isbn = '$isbn'";
-  $query2 = mysqli_query($connect, $readBuku);
-  $row = mysqli_fetch_array($query2);
-
-  $id_buku = $row['id_buku'];
-
-  $readPengarang = "SELECT * FROM pengarang WHERE nama = '$name' AND no_hp = '$pnumber'";
-  $query3 = mysqli_query($connect, $readPengarang);
-
-  $row2 = mysqli_fetch_array($query3);
-
-  $id_pengarang = $row2['id_pengarang'];
-
-  $inputBukuPengarang = "INSERT INTO buku_pengarang (id_buku, id_pengarang)
-  VALUES ('$id_buku', '$id_pengarang')";
-  $query4 = mysqli_query($connect, $inputBukuPengarang);
-
-
-
-  if ($query3 && $query4) {
-    echo "<script>alert('Success')</script>";
-    header('location:home');
   }
-  else {
-    echo "Gagal";
-  }
-}
-
-if (isset($_POST['add_cat'])) {
-
-  $cat = $_POST['cat'];
-
-  $sql = "INSERT INTO kategori (id_kategori, nama_kategori) VALUES ('', '$cat')";
-
-  $query = mysqli_query($connect, $sql);
-
-
-  if ($query) {
-    header('location:home');
-  }
-  else {
-    echo "<script>alert('Add Failed')</script>";
-  }
-
-}
-?>
+  ?>
 
 
 </body>

@@ -66,12 +66,12 @@ include "config/obstart.php";
 
           <h5 class="center">Register</h5>
           <div class="divider"></div>
-          <form action="" method="POST">
+          <form action="" method="POST" enctype="multipart/form-data">
 
             <div class="col s12 m12">
 
               <div class="input-field col s12 m12">
-                <input placeholder="Name" name="name" id="name" type="text" class="validate">
+                <input placeholder="Name" name="autname" id="name" type="text" class="validate">
                 <label for="name"></label>
               </div>
 
@@ -169,17 +169,27 @@ include "config/obstart.php";
   if (isset($_POST['submit'])) {
     include "config/connection.php";
 
-    $name = $_POST['name'];
+    $name = $_POST['autname'];
     $pnumber = $_POST['pnumber'];
     $address = $_POST['address'];
-    $photo = $_POST['photo'];
+    $loct_pic = $_FILES['photo']['tmp_name'];
+    $name_pic = $_FILES['photo']['name'];
+    $file_ext = strtolower(end(explode('.', $name_pic)));
 
-    if ($photo == '') {
-      $photo = '/default/no-ava.png';
+    $folder = 'img/photo/'.$name.'.'.$file_ext;
+
+
+    $name_pic = $name.'.'.$file_ext;
+
+    if ($name_pic == '') {
+      $name_pic = '/default/no-ava.png';
     }
 
+    move_uploaded_file($loct_pic, "$folder");
+
+
     $sql = "INSERT INTO pengarang (id_pengarang, nama, no_hp, alamat, foto_pengarang)
-    VALUES ('', '$name', '$pnumber', '$address', '$photo')";
+    VALUES ('', '$name', '$pnumber', '$address', '/photo/$name_pic')";
 
     $query = mysqli_query($connect, $sql);
 
@@ -188,7 +198,7 @@ include "config/obstart.php";
       header('location:home');
     }
     else {
-      echo "Gagal";
+      echo "<script>alert('Registration Failed')</script>";
     }
   }
   ?>
